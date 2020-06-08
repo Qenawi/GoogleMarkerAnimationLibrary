@@ -15,7 +15,7 @@ android {
         targetSdkVersion(Libraries.Apps.targetSdk)
         versionCode = Libraries.Apps.versionCode
         versionName = Libraries.Apps.versionName
-        multiDexEnabled = true
+        multiDexEnabled = false
         setProperty("archivesBaseName", "$applicationId-v$versionName($versionCode)")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -23,11 +23,11 @@ android {
         isEnabled = true
     }
     compileOptions{
-        sourceCompatibility=JavaVersion.VERSION_1_8
-        targetCompatibility=JavaVersion.VERSION_1_8
+        sourceCompatibility=JavaVersion.VERSION_11
+        targetCompatibility=JavaVersion.VERSION_11
     }
     kotlinOptions{
-        jvmTarget =JavaVersion.VERSION_1_8.toString()
+        jvmTarget =JavaVersion.VERSION_11.toString()
     }
 }
 dependencies {
@@ -52,3 +52,4 @@ dependencies {
     implementation(Libraries.Retrofit.gsonConverter)
 }
 
+///home/qenawi/Main-TJW/IDE/android-studio/jre
