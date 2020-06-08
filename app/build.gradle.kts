@@ -50,6 +50,8 @@ dependencies {
     implementation(Libraries.Timber)
     implementation(Libraries.Retrofit.retrofit)
     implementation(Libraries.Retrofit.gsonConverter)
+    implementation(Libraries.UI.materialComponent)
+
 }
 
 ///home/qenawi/Main-TJW/IDE/android-studio/jre

@@ -3,11 +3,17 @@ package tjw.go_plus_meeting.extentions
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.graphics.drawable.Drawable
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.core.view.GravityCompat
 import androidx.databinding.BindingAdapter
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.coroutines.*
@@ -16,6 +22,7 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 fun Activity.cHideSoftKeyboard() {
     val focusedView = currentFocus
@@ -34,7 +41,7 @@ fun cLoadImageFromUrl(view: ImageView, url: String?, cover: Boolean? = false)
             error(R.color.colorAccent).placeholder(R.color.colorAccent)
         } else {
             //  this.placeholder(R.drawable.user)
-            error(R.color.colorPrimary).placeholder(R.color.colorPrimary)
+            error(R.drawable.ic_launcher_background).placeholder(R.drawable.ic_launcher_background)
         }
     }
     Glide.with(view.context).applyDefaultRequestOptions(requestOptions).load("$url")
@@ -89,12 +96,22 @@ fun View.mEnable(boolean: Boolean?) =
 fun View.mProgress(boolean: Boolean?) {
     cVisible(boolean)
 }
+@SuppressLint("SetTextI18n")
+@BindingAdapter(
+    value = ["safe_text", "decimal_format", "before_text", "after_text"],
+    requireAll = false
+)
+fun TextView.mText(any: Any?, boolean: Boolean?, before_text: Int?, after_text: Int?) =
+    any?.let { sText ->
+        text = if (boolean == true) (sText as Int).safeDecimalFormat() else sText.toString()
+        before_text?.let { aa ->
+            text = "${getString_(aa)} ${text.toString()}"
+        }
+        after_text?.let { aa ->
+            text = "${text.toString()} ${getString_(aa)} "
+        }
+    }
 
-@BindingAdapter(value =  ["safe_text","decimal_format"],requireAll = false)
-fun TextView.mText(any: Any?, boolean: Boolean?) = any?.let {
-        sText ->
-    text = if(boolean==true)(sText as Int).safeDecimalFormat() else sText.toString()
-}
 fun Int?.safeDecimalFormat():String{
     val df = DecimalFormat("#,###")
     df.roundingMode = RoundingMode.CEILING
@@ -111,8 +128,26 @@ fun delay250(block: (Any) -> Unit = {}) {
         { block(Any()) }
     }
 }
-
-
+fun delay150(block: (Any) -> Unit = {}) {
+    GlobalScope.launch {
+        delay(150)
+        withContext(Dispatchers.Main)
+        { block(Any()) }
+    }
+}
+@SuppressLint("SetTextI18n")
+@BindingAdapter("safe_date")
+fun TextView.mSafeDate(date:String?)
+{
+    val formatDate= try{ convertDateFromFormatToOther(date?:"") }catch (e:Exception) {null}
+    this.text=formatDate?:"not dated"
+}
+private fun convertDateFromFormatToOther(fDate:String):String?
+{
+    val parser =  SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ROOT).parse(fDate)
+    val formatter = SimpleDateFormat("MMM dd yyyy",Locale.ROOT)
+    return parser?.let { date -> formatter.format(date) }
+}
 @SuppressLint("SimpleDateFormat")
 @BindingAdapter("milliSecondData")
 fun TextView.msData(msDate: String?)
@@ -120,15 +155,78 @@ fun TextView.msData(msDate: String?)
     this.text= SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH).format(date.toLong())
 }
 @BindingAdapter("go_back", "title", requireAll = false)
-fun View.handle(data: MutableLiveData<Boolean>?, name: MutableLiveData<String>?) {
+fun View.handle(data: MutableLiveData<Boolean>?, name: MutableLiveData<String>?)
+{
     when (name?.value) {
-        getString_(R.string.app_name) ,getString_(R.string.app_name),getString_(R.string.app_name)-> this.cVisible(false)
+        getString_(R.string.app_name) -> this.cVisible(false)
         else -> this.cVisible(true)
     }
     this.setOnClickListener { data?.postValue(true) }
 }
+@BindingAdapter( "menue_action","menue_title",requireAll = true)
+fun View.handleMenue(data: MutableLiveData<Boolean>?,name: MutableLiveData<String>?)
+{
+    when (name?.value) {
+        getString_(R.string.app_name) -> this.cVisible(true)
+        else -> this.cVisible(false)
+    }
+    this.setOnClickListener { data?.postValue(true) }
+}
+
+@BindingAdapter("search_", "title_", requireAll = false)
+fun View.handle_search(data: MutableLiveData<Boolean>?, name: MutableLiveData<String>?) {
+    when (name?.value) {
+        getString_(R.string.app_name) -> this.cVisible(false)
+        else -> this.cVisible(true)
+    }
+    this.setOnClickListener { data?.postValue(true) }
+}
+
+
+
 fun View.getString_(resource_id: Int): String = try {
     this.context.getString(resource_id)
 } catch (e: Exception) {
     "-"
 }
+
+fun View.getImg_(resource_id: Int): Drawable = try {
+    this.context.resources.getDrawable(resource_id)
+} catch (e: Exception) {
+    this.context.resources.getDrawable(R.drawable.ic_launcher_foreground)
+}
+
+
+@BindingAdapter("from_res_id")
+fun View.fromDate(int: Int?)
+{
+    int?.let {id->
+        when(this)
+        {
+            is TextView -> this.text=this.getString_(id)
+            is ImageView->this.setImageDrawable(this.getImg_(id))
+        }
+    }}
+@BindingAdapter("menu_selection","selection",requireAll = true)
+fun View.menuSelection(res: tjw.go_plus_meeting.extentions.MenuItem?, navigation: Navigation?)=cVisible(navigation?.equals(res?.type))
+
+
+fun RecyclerView.mLinearLayoutManager() {
+    this.layoutManager = LinearLayoutManager(this.context)
+}
+
+@BindingAdapter("controle_drawer")
+fun DrawerLayout.handle(navigation: NavState?)
+{
+    when(navigation)
+    {
+        NavState.Closed  -> if (isDrawerOpen(GravityCompat.START)) closeDrawer(GravityCompat.START) else openDrawer(
+            GravityCompat.START)
+        NavState.OPENED -> if (!isDrawerOpen(GravityCompat.START))  openDrawer(GravityCompat.START) else closeDrawer(
+            GravityCompat.START)
+        null,NavState.NONE ->{}
+    }
+
+}
+
+//new Update ->

@@ -1,11 +1,32 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/Gray</item>
+        <item name="fontFamily">@font/helvetica</item>
+        <item name="colorPrimaryDark">@color/Black</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="app_bg" >
+        <item name="background">@color/FloralWhite</item>
+    </style>
+    <style name="bold" parent="Widget.MaterialComponents.TextView">
+        <item name="fontFamily">@font/helvetica_bold</item>
+    </style>
+    <style name="normal" parent="Widget.MaterialComponents.TextView">
+        <item name="fontFamily">@font/helvetica</item>
+    </style>
+    <style name="button_style" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">@font/helvetica_bold</item>
+        <item name="android:textColor">@color/White</item>
+        <item name="rippleColor">@color/LightGrey</item>
+        <item name="cornerRadius">5dp</item>
+        <item name="backgroundTint">@color/Black</item>
+    </style>
+
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="headerTextSize">28sp</dimen>
 
 </resources>

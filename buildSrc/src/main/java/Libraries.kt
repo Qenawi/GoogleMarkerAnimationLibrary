@@ -134,6 +134,7 @@ object Libraries {
         const val composeRuntime = "androidx.compose:compose-runtime:${version}"
         const val framework = "androidx.ui:ui-framework:$version"
         const val layout = "androidx.ui:ui-layout:$version"
+        const val materialComponent="com.google.android.material:material:1.2.0-alpha06"
         const val material = "androidx.ui:ui-material:$version"
         const val foundation = "androidx.ui:ui-foundation:$version"
         const val animation = "androidx.ui:ui-animation:$version"
