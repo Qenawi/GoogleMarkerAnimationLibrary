@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import org.junit.runner.notification.Failure
+import tjw.go_plus_meeting.domain.network.Failure
 
 open class BaseViewModel<T>(
     application: Application,
