@@ -5,8 +5,7 @@ import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import tjw.go_plus_meeting.extentions.delay250
 import tjw.go_plus_meeting.extentions.mLaunchActivity
-import tjw.link_task.extentions.delay250
-import tjw.link_task.extentions.mLaunchActivity
+
 
 class Splash:AppCompatActivity (){
     override fun onCreate(savedInstanceState: Bundle?)

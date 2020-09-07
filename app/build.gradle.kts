@@ -6,6 +6,8 @@ plugins {
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
+    id("com.google.gms.google-services")
+
 }
 
 android {
@@ -51,6 +53,10 @@ dependencies {
     implementation(Libraries.Retrofit.retrofit)
     implementation(Libraries.Retrofit.gsonConverter)
     implementation(Libraries.UI.materialComponent)
+    implementation(Libraries.Google.playServiceLocation)
+    implementation(Libraries.Google.playServiceMap)
+
+
 
 }
 
